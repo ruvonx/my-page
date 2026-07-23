@@ -1,290 +1,319 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Official ASMR Relax Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Avena Official</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh;background:#0d0d1f;font-family:'Inter',sans-serif;color:#e0e6f0;overflow-x:hidden;}
 
-    body {
-      min-height: 100vh;
-      background: radial-gradient(ellipse at 20% 50%, #2d1a4a 0%, #0d1b2a 50%, #0a0f1e 100%);
-      font-family: 'Inter', sans-serif;
-      color: #e0e6f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      position: relative;
-      overflow-x: hidden;
-    }
+/* Animated Canvas Background */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
 
-    /* Star dots background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 75% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 5% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 85% 75%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 95%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 95% 90%, rgba(255,255,255,0.4) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
+/* Pages */
+.page{display:none;min-height:100vh;position:relative;z-index:1;padding:24px 16px 40px;}
+.page.active{display:flex;flex-direction:column;align-items:center;}
 
-    /* Constellation lines - decorative */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(135deg, transparent 48%, rgba(100,150,255,0.04) 49%, rgba(100,150,255,0.04) 51%, transparent 52%),
-        linear-gradient(45deg, transparent 48%, rgba(100,150,255,0.03) 49%, rgba(100,150,255,0.03) 51%, transparent 52%);
-      background-size: 300px 300px, 250px 250px;
-      pointer-events: none;
-      z-index: 0;
-    }
+/* Card */
+.card{width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px;}
 
-    .card {
-      width: 100%;
-      max-width: 360px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-    }
+/* Profile block */
+.profile-block{background:rgba(20,25,55,0.82);border:1px solid rgba(80,100,180,0.3);border-radius:18px;padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter:blur(10px);}
+.avatar{width:68px;height:68px;border-radius:50%;background:rgba(15,20,50,0.9);border:2px solid rgba(100,140,230,0.5);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.badge{display:flex;align-items:center;gap:6px;background:rgba(10,15,40,0.85);border:1px solid rgba(60,90,160,0.4);border-radius:20px;padding:5px 16px;font-size:10px;font-family:'Orbitron',sans-serif;font-weight:600;letter-spacing:1.8px;color:#a0c4ff;text-transform:uppercase;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 7px #4ade80;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
-    /* Profile block */
-    .profile-block {
-      background: rgba(20, 30, 55, 0.85);
-      border: 1px solid rgba(80, 100, 160, 0.3);
-      border-radius: 18px;
-      padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      backdrop-filter: blur(8px);
-    }
+/* Banner */
+.banner-block{background:rgba(20,25,55,0.82);border:1px solid rgba(80,100,180,0.3);border-radius:18px;overflow:hidden;backdrop-filter:blur(10px);cursor:pointer;}
+.banner-block img{width:100%;display:block;border-radius:18px;transition:transform 0.3s;}
+.banner-block:hover img{transform:scale(1.02);}
 
-    .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1a2a5e, #2e4a8a);
-      border: 2px solid rgba(100, 140, 220, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-    }
+/* Buttons block */
+.buttons-block{background:rgba(20,25,55,0.82);border:1px solid rgba(80,100,180,0.3);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;backdrop-filter:blur(10px);}
+.btn{display:block;width:100%;padding:14px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;text-align:center;text-decoration:none;transition:filter 0.2s,transform 0.15s;}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn-pink{background:linear-gradient(90deg,#c026d3 0%,#ec4899 50%,#f97316 100%);color:#fff;}
+.btn-blue{background:linear-gradient(90deg,#3730a3 0%,#6366f1 50%,#8b5cf6 100%);color:#fff;}
+.desc{text-align:center;font-size:11.5px;color:rgba(180,200,240,0.5);line-height:1.65;padding:0 4px;}
 
-    .badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(10, 20, 40, 0.8);
-      border: 1px solid rgba(60, 90, 150, 0.4);
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 10px;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      color: #a0c4ff;
-      text-transform: uppercase;
-    }
+/* Footer */
+.footer-block{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.footer-links{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.footer-links a{background:rgba(20,25,55,0.75);border:1px solid rgba(80,100,180,0.25);border-radius:20px;padding:6px 14px;font-size:11.5px;color:rgba(180,200,240,0.7);text-decoration:none;transition:background 0.2s,color 0.2s;cursor:pointer;backdrop-filter:blur(6px);}
+.footer-links a:hover{background:rgba(80,100,210,0.3);color:#e0e8ff;}
+.copyright{font-size:11px;color:rgba(150,170,210,0.4);}
 
-    .badge::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 6px #4ade80;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    /* Image block */
-    .image-block {
-      background: rgba(20, 30, 55, 0.85);
-      border: 1px solid rgba(80, 100, 160, 0.3);
-      border-radius: 18px;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      backdrop-filter: blur(8px);
-      position: relative;
-    }
-
-    .image-block img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .image-placeholder {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 30%, #1a2a3e 60%, #0d1b2a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      color: rgba(160, 180, 220, 0.4);
-      font-size: 13px;
-    }
-
-    .image-placeholder span { font-size: 40px; }
-
-    /* Buttons block */
-    .buttons-block {
-      background: rgba(20, 30, 55, 0.85);
-      border: 1px solid rgba(80, 100, 160, 0.3);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      backdrop-filter: blur(8px);
-    }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px 20px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.3px;
-      text-align: center;
-      text-decoration: none;
-      transition: filter 0.2s, transform 0.15s;
-    }
-
-    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-
-    .btn-pink {
-      background: linear-gradient(90deg, #e040b0 0%, #f06292 50%, #ff8a65 100%);
-      color: #fff;
-    }
-
-    .btn-blue {
-      background: linear-gradient(90deg, #3a4bd4 0%, #5b7cf7 50%, #7c5cbf 100%);
-      color: #fff;
-    }
-
-    .desc {
-      text-align: center;
-      font-size: 11.5px;
-      color: rgba(180, 200, 240, 0.55);
-      line-height: 1.6;
-      padding: 0 4px;
-    }
-
-    /* Footer links */
-    .footer-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .footer-links a {
-      background: rgba(20, 30, 55, 0.75);
-      border: 1px solid rgba(80, 100, 160, 0.25);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 11.5px;
-      color: rgba(180, 200, 240, 0.7);
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      backdrop-filter: blur(6px);
-    }
-
-    .footer-links a:hover {
-      background: rgba(80, 100, 200, 0.3);
-      color: #e0e8ff;
-    }
-
-    .copyright {
-      font-size: 11px;
-      color: rgba(150, 170, 210, 0.4);
-    }
-  </style>
+/* Sub pages */
+.sub-header{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:4px;}
+.sub-logo{width:56px;height:56px;border-radius:50%;background:rgba(15,20,50,0.9);border:2px solid rgba(100,140,230,0.5);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.sub-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.sub-badge{display:flex;align-items:center;gap:6px;background:rgba(10,15,40,0.85);border:1px solid rgba(60,90,160,0.4);border-radius:20px;padding:4px 14px;font-size:9px;font-family:'Orbitron',sans-serif;font-weight:600;letter-spacing:1.5px;color:#a0c4ff;text-transform:uppercase;}
+.sub-title{font-size:32px;font-weight:800;color:#fff;text-align:center;letter-spacing:-0.5px;}
+.sub-desc{font-size:12.5px;color:rgba(180,200,240,0.55);text-align:center;line-height:1.6;max-width:340px;}
+.sub-btns{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;}
+.info-cards{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.info-card{background:rgba(20,25,55,0.82);border:1px solid rgba(80,100,180,0.2);border-radius:14px;padding:16px 18px;backdrop-filter:blur(10px);}
+.info-card h3{font-size:13px;font-weight:700;color:#c4d4ff;margin-bottom:6px;}
+.info-card p{font-size:12px;color:rgba(180,200,240,0.6);line-height:1.65;}
+.last-updated{font-size:11px;color:rgba(150,170,210,0.35);text-align:center;margin-top:8px;}
+.sub-footer{width:100%;max-width:380px;margin-top:16px;}
+.sub-footer-links{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+.sub-footer-links a{background:rgba(20,25,55,0.75);border:1px solid rgba(80,100,180,0.25);border-radius:20px;padding:6px 14px;font-size:11.5px;color:rgba(180,200,240,0.7);text-decoration:none;cursor:pointer;transition:background 0.2s;}
+.sub-footer-links a:hover{background:rgba(80,100,210,0.3);color:#e0e8ff;}
+.sub-copyright{font-size:11px;color:rgba(150,170,210,0.35);text-align:center;}
+</style>
 </head>
 <body>
 
+<canvas id="bgCanvas"></canvas>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
   <div class="card">
-
-    <!-- Profile Block -->
     <div class="profile-block">
-      <div class="avatar">🎧</div>
-      <div class="badge">Official ASMR Relax Hub</div>
-    </div>
-
-    <!-- Image Block -->
-    <div class="image-block">
-      <!--
-        আপনার নিজের ছবি যোগ করতে চাইলে:
-        <img src="আপনার-ছবির-লিংক.jpg" alt="cover" />
-        নিচের placeholder div টি মুছে দিন।
-      -->
-      <div class="image-placeholder">
-        <span>🌸</span>
-        আপনার ছবি এখানে বসান
+      <div class="avatar">
+        <img src="logo.png" alt="Avena" onerror="this.parentElement.innerHTML='🎧'"/>
       </div>
+      <div class="badge"><span class="badge-dot"></span>Official ASMR Relax Hub</div>
     </div>
 
-    <!-- Buttons Block -->
+    <div class="banner-block" onclick="window.open('https://t.me/+ueskjF9UkF9lNWY9','_blank')">
+      <img src="banner.png" alt="Avena Banner" onerror="this.style.display='none';this.parentElement.style.minHeight='220px';this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#2d1b4e,#0d1b2a)'"/>
+    </div>
+
     <div class="buttons-block">
-      <a href="#" class="btn btn-pink">Enter the Private Room 🍓</a>
-      <a href="#" class="btn btn-blue">Join Private Telegram 🔒</a>
-      <p class="desc">
-        Private relaxation access, calming visuals, soft atmosphere, and
-        official updates in one clean place.
-      </p>
+      <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-pink">Enter the Private Room 🍓</a>
+      <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-blue">Join Private Telegram 🔒</a>
+      <p class="desc">Private relaxation access, calming visuals, soft atmosphere, and official Avena updates in one clean place.</p>
     </div>
 
-    <!-- Footer -->
     <div class="footer-block">
       <div class="footer-links">
-        <a href="#">Contact</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Safety</a>
+        <a onclick="showPage('contact')">Contact</a>
+        <a onclick="showPage('privacy')">Privacy Policy</a>
+        <a onclick="showPage('terms')">Terms of Use</a>
+        <a onclick="showPage('safety')">Safety</a>
       </div>
-      <p class="copyright">© 2026 ASMR Hub. All rights reserved.</p>
+      <p class="copyright">© 2026 Avena. All rights reserved.</p>
     </div>
-
   </div>
+</div>
 
+<!-- CONTACT PAGE -->
+<div class="page" id="page-contact">
+  <div class="sub-header">
+    <div class="sub-logo"><img src="logo.png" alt="Avena" onerror="this.parentElement.innerHTML='🎧'"/></div>
+    <div class="sub-badge"><span class="badge-dot"></span>Avena Official</div>
+    <h1 class="sub-title">Contact</h1>
+    <p class="sub-desc">For official updates, private access, or general questions, use the official Avena access paths below.</p>
+  </div>
+  <div class="sub-btns">
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-pink">Enter the Private Room 🍓</a>
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-blue">Join Private Telegram 🔒</a>
+  </div>
+  <div class="info-cards">
+    <div class="info-card"><h3>Official Contact Path</h3><p>Avena keeps communication and access organized through the official website and its private access buttons. This helps users avoid outdated links, unofficial copies, and confusing third-party pages.</p></div>
+    <div class="info-card"><h3>Support & General Questions</h3><p>For access questions, general support, or information about available content, use the official private access paths shown on this website. Response options may vary depending on the third-party platform used after leaving the site.</p></div>
+    <div class="info-card"><h3>Business Communication</h3><p>Requests related to partnerships, collaboration, or formal matters should use the official platform path where current communication options are available. Messages sent through unofficial channels may not receive a response.</p></div>
+    <div class="info-card"><h3>Important Notice</h3><p>Avena does not ask users to share sensitive private information through unofficial pages. Always check that you are using the official Avena website before following access links.</p></div>
+    <p class="last-updated">Last updated: 2026 · <a onclick="showPage('home')" style="color:rgba(160,196,255,0.5);cursor:pointer;text-decoration:none;">Back to Avena</a></p>
+  </div>
+  <div class="sub-footer">
+    <div class="sub-footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('contact')">Contact</a>
+      <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('terms')">Terms of Use</a>
+      <a onclick="showPage('safety')">Safety</a>
+    </div>
+    <p class="sub-copyright">© 2026 Avena. All rights reserved.</p>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY PAGE -->
+<div class="page" id="page-privacy">
+  <div class="sub-header">
+    <div class="sub-logo"><img src="logo.png" alt="Avena" onerror="this.parentElement.innerHTML='🎧'"/></div>
+    <div class="sub-badge"><span class="badge-dot"></span>Avena Official</div>
+    <h1 class="sub-title">Privacy Policy</h1>
+    <p class="sub-desc">This Privacy Policy explains general privacy principles for visiting Avena pages and using official access links.</p>
+  </div>
+  <div class="sub-btns">
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-pink">Enter the Private Room 🍓</a>
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-blue">Join Private Telegram 🔒</a>
+  </div>
+  <div class="info-cards">
+    <div class="info-card"><h3>General Information</h3><p>Avena is designed as an official wellness video hub and navigation point for ASMR relax massage updates, private relaxation links, and related content access. We aim to keep browsing simple, respectful, and transparent.</p></div>
+    <div class="info-card"><h3>Technical Data</h3><p>Like most websites, this site may be delivered through hosting, browser, DNS, security, and content delivery technologies. Standard technical information may be processed for page loading, security, compatibility, abuse prevention, and performance.</p></div>
+    <div class="info-card"><h3>Third-Party Platforms</h3><p>Some buttons or links may lead to independent third-party platforms. Those platforms operate under their own terms, privacy rules, account settings, and data practices. Users should review the policies of any external service they choose to access.</p></div>
+    <div class="info-card"><h3>Cookies & Analytics</h3><p>This website may use standard browser technologies, logs, or privacy-friendly analytics in the future to understand availability, page performance, and general traffic patterns. Any such use would remain limited to normal website operation and improvement.</p></div>
+    <div class="info-card"><h3>User Choice</h3><p>Users can leave the website at any time, adjust browser privacy settings, block cookies where supported, or choose not to follow external access links. Continued use of the website means the user accepts the current version of this policy.</p></div>
+    <p class="last-updated">Last updated: 2026 · <a onclick="showPage('home')" style="color:rgba(160,196,255,0.5);cursor:pointer;text-decoration:none;">Back to Avena</a></p>
+  </div>
+  <div class="sub-footer">
+    <div class="sub-footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('contact')">Contact</a>
+      <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('terms')">Terms of Use</a>
+      <a onclick="showPage('safety')">Safety</a>
+    </div>
+    <p class="sub-copyright">© 2026 Avena. All rights reserved.</p>
+  </div>
+</div>
+
+<!-- TERMS OF USE PAGE -->
+<div class="page" id="page-terms">
+  <div class="sub-header">
+    <div class="sub-logo"><img src="logo.png" alt="Avena" onerror="this.parentElement.innerHTML='🎧'"/></div>
+    <div class="sub-badge"><span class="badge-dot"></span>Avena Official</div>
+    <h1 class="sub-title">Terms of Use</h1>
+    <p class="sub-desc">These Terms describe the basic conditions for accessing Avena pages, buttons, and related content links.</p>
+  </div>
+  <div class="sub-btns">
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-pink">Enter the Private Room 🍓</a>
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-blue">Join Private Telegram 🔒</a>
+  </div>
+  <div class="info-cards">
+    <div class="info-card"><h3>Website Access</h3><p>This website is provided for general informational and navigational purposes. By accessing or using these pages, users agree to do so in a lawful, respectful, and appropriate manner consistent with applicable platform rules and standard internet practices.</p></div>
+    <div class="info-card"><h3>Content & Availability</h3><p>Content, layouts, visuals, links, and page elements may be updated, reorganized, limited, or removed at any time without prior notice. Availability may vary depending on platform access, regional factors, technical conditions, or external service changes.</p></div>
+    <div class="info-card"><h3>Third-Party Destinations</h3><p>This website may direct users to third-party pages or services. Those destinations operate independently and may have their own terms, restrictions, privacy standards, and user requirements.</p></div>
+    <div class="info-card"><h3>Use Limitations</h3><p>Users may not misuse the website, interfere with its operation, attempt unauthorized access, or reproduce branded materials in a misleading or unauthorized way. Nothing here grants ownership, licensing rights, or permission for improper redistribution.</p></div>
+    <div class="info-card"><h3>General Notice</h3><p>All content is provided on an "as available" basis without guarantees of uninterrupted operation, permanent access, or specific results. Continued use after updates indicates acceptance of the current version of these terms.</p></div>
+    <p class="last-updated">Last updated: 2026 · <a onclick="showPage('home')" style="color:rgba(160,196,255,0.5);cursor:pointer;text-decoration:none;">Back to Avena</a></p>
+  </div>
+  <div class="sub-footer">
+    <div class="sub-footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('contact')">Contact</a>
+      <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('terms')">Terms of Use</a>
+      <a onclick="showPage('safety')">Safety</a>
+    </div>
+    <p class="sub-copyright">© 2026 Avena. All rights reserved.</p>
+  </div>
+</div>
+
+<!-- SAFETY PAGE -->
+<div class="page" id="page-safety">
+  <div class="sub-header">
+    <div class="sub-logo"><img src="logo.png" alt="Avena" onerror="this.parentElement.innerHTML='🎧'"/></div>
+    <div class="sub-badge"><span class="badge-dot"></span>Avena Official</div>
+    <h1 class="sub-title">Safety</h1>
+    <p class="sub-desc">This page explains basic safety guidance for using Avena links, private access buttons, and third-party platforms.</p>
+  </div>
+  <div class="sub-btns">
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-pink">Enter the Private Room 🍓</a>
+    <a href="https://t.me/+ueskjF9UkF9lNWY9" target="_blank" class="btn btn-blue">Join Private Telegram 🔒</a>
+  </div>
+  <div class="info-cards">
+    <div class="info-card"><h3>Official Website</h3><p>Use the official Avena site as the starting point for updates and private access. Similar names or other domain zones may not be connected to the official project.</p></div>
+    <div class="info-card"><h3>External Links</h3><p>Some buttons may open third-party platforms. Before using any external service, check its URL, account requirements, payment rules, and privacy settings.</p></div>
+    <div class="info-card"><h3>User Responsibility</h3><p>Users are responsible for following the rules of any third-party platform they access. Do not share passwords, payment details, or personal data with pages that do not look official or trustworthy.</p></div>
+    <div class="info-card"><h3>Wellness Context</h3><p>Avena presents ASMR relax massage and wellness-style video access in a calm, private, and respectful format. Content availability, access rules, and platform limitations may change over time.</p></div>
+    <div class="info-card"><h3>Report Issues</h3><p>If you notice a suspicious copy, misleading domain, or broken access path, return to the official website and use the most current access route provided there.</p></div>
+    <p class="last-updated">Last updated: 2026 · <a onclick="showPage('home')" style="color:rgba(160,196,255,0.5);cursor:pointer;text-decoration:none;">Back to Avena</a></p>
+  </div>
+  <div class="sub-footer">
+    <div class="sub-footer-links">
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('contact')">Contact</a>
+      <a onclick="showPage('privacy')">Privacy Policy</a>
+      <a onclick="showPage('terms')">Terms of Use</a>
+      <a onclick="showPage('safety')">Safety</a>
+    </div>
+    <p class="sub-copyright">© 2026 Avena. All rights reserved.</p>
+  </div>
+</div>
+
+<script>
+// Page navigation
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Animated constellation background
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, stars=[], lines=[];
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+}
+
+function initStars(){
+  stars=[];
+  const count = Math.floor((W*H)/8000);
+  for(let i=0;i<count;i++){
+    stars.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-0.5)*0.18, vy:(Math.random()-0.5)*0.18,
+      r:Math.random()*1.4+0.4,
+      a:Math.random()*0.7+0.3
+    });
+  }
+}
+
+function drawBg(){
+  const grad=ctx.createRadialGradient(W*0.2,H*0.5,0,W*0.5,H*0.5,W*0.8);
+  grad.addColorStop(0,'#2d1a4a');
+  grad.addColorStop(0.5,'#0d1b2a');
+  grad.addColorStop(1,'#0a0f1e');
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H);
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  drawBg();
+
+  // Move stars
+  stars.forEach(s=>{
+    s.x+=s.vx; s.y+=s.vy;
+    if(s.x<0)s.x=W; if(s.x>W)s.x=0;
+    if(s.y<0)s.y=H; if(s.y>H)s.y=0;
+  });
+
+  // Draw constellation lines
+  const maxDist=120;
+  for(let i=0;i<stars.length;i++){
+    for(let j=i+1;j<stars.length;j++){
+      const dx=stars[i].x-stars[j].x;
+      const dy=stars[i].y-stars[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<maxDist){
+        const alpha=(1-dist/maxDist)*0.25;
+        ctx.beginPath();
+        ctx.moveTo(stars[i].x,stars[i].y);
+        ctx.lineTo(stars[j].x,stars[j].y);
+        ctx.strokeStyle=`rgba(120,160,255,${alpha})`;
+        ctx.lineWidth=0.6;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Draw stars
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(200,220,255,${s.a})`;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize',()=>{resize();initStars();});
+resize(); initStars(); animate();
+</script>
 </body>
 </html>

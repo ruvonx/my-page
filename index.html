@@ -256,7 +256,7 @@ function initStars(){
     stars.push({
       x:Math.random()*W, y:Math.random()*H,
       vx:(Math.random()-0.5)*6.0, vy:(Math.random()-0.5)*6.0,
-      r:Math.random()*3+1,
+      r:Math.random()*9+3,
       a:Math.random()*0.7+0.3
     });
   }
@@ -283,7 +283,7 @@ function animate(){
   });
 
   // Draw constellation lines
-  const maxDist=220;
+  const maxDist=660;
   for(let i=0;i<stars.length;i++){
     for(let j=i+1;j<stars.length;j++){
       const dx=stars[i].x-stars[j].x;
